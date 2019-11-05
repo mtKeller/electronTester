@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var express = require("express");
 var bodyParser = require("body-parser");
+var cors = require("cors");
 // Create a new express application instance
 var app = express();
 var RECORDS = {
@@ -11,6 +12,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
     extended: true
 }));
+app.use(cors());
 // CREATE
 app.post('/record', function (req, res) {
     if (req.body) {

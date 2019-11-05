@@ -1,5 +1,6 @@
 import express = require('express');
 import bodyParser = require('body-parser');
+import cors = require('cors');
 
 interface device {
   id: number;
@@ -23,6 +24,8 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
   extended: true
 }));
+
+app.use(cors());
 
 // CREATE
 app.post('/record', function (req, res) {

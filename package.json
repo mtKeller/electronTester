@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/mtKeller/electronTester#readme",
   "dependencies": {
+    "@types/axios": "^0.14.0",
     "concurrently": "^5.0.0"
   }
 }

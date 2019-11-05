@@ -3,7 +3,7 @@ import logo from './logo.svg';
 import './App.css';
 import Device from './models/device.model';
 import DeviceComponent from './components/device.component';
-import * as axios from 'axios';
+const axios = require('axios');
 
 const testDevice: Device = {
   id: 123,
@@ -13,19 +13,90 @@ const testDevice: Device = {
 }
 
 const App: React.FC = () => {
-  const [count, setCount] = useState(0);
+  // let deviceList: Array<Device> = [testDevice];
+  const devices = [ testDevice ];
+  const [deviceList, setDeviceList] = useState(devices);
   return (
     <div className="App">
       <header className="App-header">
         <h1>Electron CRUD Test APP</h1>
       </header>
       <div>
-      <p>You clicked {count} times</p>
-        <button onClick={() => setCount(count + 1)}>
-          Click me
+        <button onClick={ () =>
+          axios.get('http://localhost:4333/record')
+            .then((response: any) => {
+              setDeviceList(response.data);
+            })}> REFRESH
         </button>
       </div>
-      <DeviceComponent device={testDevice}></DeviceComponent>
+      <div>
+        <span>
+          ID
+        </span>
+        <span>
+          NAME
+        </span>
+        <span>
+          IP ADDRESS
+        </span>
+        <span>
+          ARCHITECTURE
+        </span>
+      </div>
+      {deviceList.map((device: Device, i: number) => {
+        return (<DeviceComponent device={device}></DeviceComponent>) 
+      })}
+      <div>
+        <h3>New Device</h3>
+        <label htmlFor="newId">ID: </label>
+        <input id="newId" type="text"/>
+        <br/>
+        <label htmlFor="newName">Name: </label>
+        <input id="newName" type="text"/>
+        <br/>
+        <label htmlFor="newIp">IP: </label>
+        <input id="newIp" type="text"/>
+        <br/>
+        <label htmlFor="newArchitecture">Architecture: </label>
+        <input id="newArchitecture" type="text"/>
+        <br/>
+        <button onClick={() => {
+          let newerId = document.getElementById('newId') as HTMLInputElement;
+          let newerIdValue = newerId.value;
+          let newerName = document.getElementById('newName') as HTMLInputElement;
+          let newerNameValue = newerName.value;
+          let newerIp = document.getElementById('newIp') as HTMLInputElement;
+          let newerIpValue = newerIp.value;
+          let newerArchitecture = document.getElementById('newArchitecture') as HTMLInputElement;
+          let newerArchitectureValue = newerArchitecture.value;
+
+          if (newerIdValue !== '' &&
+              newerNameValue !== '' &&
+              newerIpValue !== '' &&
+              newerArchitectureValue !== '') {
+                axios.post('http://localhost:4333/record', {
+                  id: newerIdValue,
+                  name: newerNameValue,
+                  ip: newerIpValue,
+                  architecture: newerArchitectureValue
+                })
+                .then((response: any) => {
+                  if(response.data) {
+                    newerId.value = '';
+                    newerName.value = '';
+                    newerIp.value = '';
+                    newerArchitecture.value = '';
+                  }
+                  console.log('TESTER');
+                  axios.get('http://localhost:4333/record')
+                    .then((response: any) => {
+                      console.log('TEST');
+                      setDeviceList(response.data);
+                    })
+                })
+          }
+        }}>Submit</button>
+      </div>
     </div>
   );
 }
