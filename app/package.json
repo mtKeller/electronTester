@@ -1,0 +1,23 @@
+{
+  "name": "app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "electron ./dist/main.js",
+    "build": "tsc",
+    "prod": "npm run build && npm run start",
+    "electron-build" : "concurrently \"cd react-app && npm start\" \"wait-on http://localhost:3000 && npm run prod\""
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@types/electron": "^1.6.10",
+    "concurrently": "^5.0.0",
+    "electron": "^7.1.0",
+    "typescript": "^3.7.2",
+    "wait-on": "^3.3.0"
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "name": "electron-tester",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start" : "concurrently \"cd server && npm run prod\" \"cd app && npm run electron-build\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mtKeller/electronTester.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mtKeller/electronTester/issues"
+  },
+  "homepage": "https://github.com/mtKeller/electronTester#readme",
+  "dependencies": {
+    "concurrently": "^5.0.0"
+  }
+}
