@@ -78,6 +78,7 @@ app.delete('/record', function (req, res) {
   if (req.body) {
     let newRecord = req.body;
     let newDeviceList = [];
+    console.log('FIND ME', newRecord);
     for (let i = 0; i < RECORDS.devices.length; i++) {
       if (RECORDS.devices[i].id !== newRecord.id) {
         newDeviceList.push(RECORDS.devices[i]);

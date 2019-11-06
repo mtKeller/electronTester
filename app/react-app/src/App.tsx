@@ -1,5 +1,4 @@
-import React, {useState, Component} from 'react';
-import logo from './logo.svg';
+import React, {useState, useEffect} from 'react';
 import './App.css';
 import Device from './models/device.model';
 import DeviceComponent from './components/device.component';
@@ -12,57 +11,36 @@ const testDevice: Device = {
   architecture: 'Lidux'
 }
 
-const App: React.FC = () => {
+function App() {
   // let deviceList: Array<Device> = [testDevice];
-  const devices = [ testDevice ];
+  const devices = [ ];
   const [deviceList, setDeviceList] = useState(devices);
-  return (
-    <div className="App">
-      <header className="App-header">
-        <h1>Electron CRUD Test APP</h1>
-      </header>
-      <div>
-        <button onClick={ () =>
-          axios.get('http://localhost:4333/record')
-            .then((response: any) => {
-              setDeviceList(response.data);
-            })}> REFRESH
-        </button>
-      </div>
-      <div>
-        <span>
-          ID
-        </span>
-        <span>
-          NAME
-        </span>
-        <span>
-          IP ADDRESS
-        </span>
-        <span>
-          ARCHITECTURE
-        </span>
-      </div>
-      {deviceList.map((device: Device, i: number) => {
-        return (<DeviceComponent device={device}></DeviceComponent>) 
-      })}
-      <div>
-        <h3>New Device</h3>
-        <label htmlFor="newId">ID: </label>
-        <input id="newId" type="text"/>
-        <br/>
-        <label htmlFor="newName">Name: </label>
-        <input id="newName" type="text"/>
-        <br/>
-        <label htmlFor="newIp">IP: </label>
-        <input id="newIp" type="text"/>
-        <br/>
-        <label htmlFor="newArchitecture">Architecture: </label>
-        <input id="newArchitecture" type="text"/>
-        <br/>
-        <button onClick={() => {
-          let newerId = document.getElementById('newId') as HTMLInputElement;
-          let newerIdValue = newerId.value;
+
+  function getRecordsList() {
+    axios.get('http://localhost:4333/record')
+    .then((response: any) => {
+      setDeviceList(response.data);
+    })
+  }
+
+  useEffect(() => {
+    getRecordsList();
+  })
+
+  const [newDeviceId, setNewDeviceId] = useState(0);
+
+  function handleIdField(e) {
+		let newNumber = Number(e.target.value);
+		if (newNumber) {
+			setNewDeviceId(newNumber);
+		} else {
+			setNewDeviceId(newDeviceId);
+		}
+	}
+
+  function addToRecordList() {
+    let newerId = document.getElementById('newId') as HTMLInputElement;
+          let newerIdValue = Number(newerId.value);
           let newerName = document.getElementById('newName') as HTMLInputElement;
           let newerNameValue = newerName.value;
           let newerIp = document.getElementById('newIp') as HTMLInputElement;
@@ -70,7 +48,7 @@ const App: React.FC = () => {
           let newerArchitecture = document.getElementById('newArchitecture') as HTMLInputElement;
           let newerArchitectureValue = newerArchitecture.value;
 
-          if (newerIdValue !== '' &&
+          if (newerIdValue !== 0 &&
               newerNameValue !== '' &&
               newerIpValue !== '' &&
               newerArchitectureValue !== '') {
@@ -82,7 +60,7 @@ const App: React.FC = () => {
                 })
                 .then((response: any) => {
                   if(response.data) {
-                    newerId.value = '';
+                    setNewDeviceId(0);
                     newerName.value = '';
                     newerIp.value = '';
                     newerArchitecture.value = '';
@@ -95,7 +73,38 @@ const App: React.FC = () => {
                     })
                 })
           }
-        }}>Submit</button>
+  }
+
+  return (
+    <div className="App">
+      <header className="App-header">
+        <h1>Electron CRUD Test APP</h1>
+      </header>
+      <div>
+        <button onClick={getRecordsList}> REFRESH
+        </button>
+      </div>
+      <h3>Devices</h3>
+      {
+        deviceList.map((device: Device, i: number) => {
+          return (<DeviceComponent device={device}></DeviceComponent>) 
+        })
+      }
+      <div>
+        <h3>Add New Device</h3>
+        <label htmlFor="newId">ID: </label>
+        <input id="newId" type="text" value={newDeviceId} onChange={handleIdField}/>
+        <br/>
+        <label htmlFor="newName">Name: </label>
+        <input id="newName" type="text"/>
+        <br/>
+        <label htmlFor="newIp">IP: </label>
+        <input id="newIp" type="text"/>
+        <br/>
+        <label htmlFor="newArchitecture">Architecture: </label>
+        <input id="newArchitecture" type="text"/>
+        <br/>
+        <button onClick={addToRecordList}>Submit</button>
       </div>
     </div>
   );
