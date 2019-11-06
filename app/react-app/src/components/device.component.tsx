@@ -84,6 +84,7 @@ function DeviceComponent (props: deviceProps){
 			<label htmlFor={device.architecture + '-field'}>Architecture: </label>
 			<input onChange={handleArchitectureField}
 				id={device.architecture + '-field'} value={architecture} />
+			<br/>
 			<button onClick={handleUpdate}>Update</button>
 			<button onClick={handleDeletion}>Delete</button>
 		</div>

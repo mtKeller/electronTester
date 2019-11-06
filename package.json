@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "concurrently \"cd server && npm run prod\" \"cd app && npm run electron-build\""
+    "start": "concurrently \"cd server && npm run prod\" \"cd app && npm run electron-build\"",
+    "install-all": "npm-recursive-install"
   },
   "repository": {
     "type": "git",
@@ -20,6 +21,7 @@
   "homepage": "https://github.com/mtKeller/electronTester#readme",
   "dependencies": {
     "@types/axios": "^0.14.0",
-    "concurrently": "^5.0.0"
+    "concurrently": "^5.0.0",
+    "recursive-install": "^1.4.0"
   }
 }
